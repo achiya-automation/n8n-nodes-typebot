@@ -1,0 +1,51 @@
+{
+  "name": "n8n-nodes-typebot",
+  "version": "1.3.21",
+  "description": "n8n community node for Typebot - A powerful chatbot builder integration",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "typebot",
+    "chatbot",
+    "conversational-ai"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "אחיה אוטומציה",
+    "email": "a.c0504197060@gmail.com"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/TypebotApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Typebot/Typebot.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.11.0",
+    "gulp": "^4.0.2",
+    "n8n-workflow": "^1.0.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {}
+}
