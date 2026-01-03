@@ -3,6 +3,7 @@ import {
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
+	ICredentialTestFunctions,
 } from 'n8n-workflow';
 
 export class TypebotApi implements ICredentialType {
@@ -45,6 +46,14 @@ export class TypebotApi implements ICredentialType {
 			headers: {
 				Authorization: '=Bearer {{$credentials.apiToken}}',
 			},
+		},
+	};
+
+	test: ICredentialTestRequest = {
+		request: {
+			baseURL: '={{$credentials.baseUrl}}',
+			url: '/v1/workspaces',
+			method: 'GET',
 		},
 	};
 }
