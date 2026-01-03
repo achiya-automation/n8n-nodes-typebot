@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-typebot",
-  "version": "1.3.21",
+  "version": "1.3.22",
   "description": "n8n community node for Typebot - A powerful chatbot builder integration",
   "keywords": [
     "n8n-community-node-package",
@@ -10,6 +10,14 @@
     "conversational-ai"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/achiya-automation/n8n-nodes-typebot#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achiya-automation/n8n-nodes-typebot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/achiya-automation/n8n-nodes-typebot/issues"
+  },
   "author": {
     "name": "אחיה אוטומציה",
     "email": "a.c0504197060@gmail.com"
