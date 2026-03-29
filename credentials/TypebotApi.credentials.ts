@@ -9,6 +9,7 @@ import {
 export class TypebotApi implements ICredentialType {
 	name = 'typebotApi';
 	displayName = 'Typebot API';
+	icon = 'file:typebot.svg' as const;
 	documentationUrl = 'https://docs.typebot.io/api-reference/authentication';
 	properties: INodeProperties[] = [
 		{

@@ -4,6 +4,9 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IDataObject,
+	JsonObject,
+	NodeApiError,
+	NodeConnectionTypes,
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -19,8 +22,8 @@ export class Typebot implements INodeType {
 		defaults: {
 			name: 'Typebot',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'typebotApi',
@@ -40,20 +43,20 @@ export class Typebot implements INodeType {
 						value: 'chat',
 					},
 					{
-						name: 'Typebot',
-						value: 'typebot',
+						name: 'Folder',
+						value: 'folder',
 					},
 					{
 						name: 'Result',
 						value: 'result',
 					},
 					{
-						name: 'Workspace',
-						value: 'workspace',
+						name: 'Typebot',
+						value: 'typebot',
 					},
 					{
-						name: 'Folder',
-						value: 'folder',
+						name: 'Workspace',
+						value: 'workspace',
 					},
 				],
 				default: 'chat',
@@ -74,16 +77,28 @@ export class Typebot implements INodeType {
 				},
 				options: [
 					{
-						name: 'Start Chat',
-						value: 'startChat',
-						description: 'Start a new chat session',
-						action: 'Start a chat session',
-					},
-					{
 						name: 'Continue Chat',
 						value: 'continueChat',
 						description: 'Continue an existing chat session',
 						action: 'Continue a chat session',
+					},
+					{
+						name: 'Generate Upload URL',
+						value: 'generateUploadUrl',
+						description: 'Generate a presigned URL for file upload',
+						action: 'Generate upload URL',
+					},
+					{
+						name: 'Save Logs',
+						value: 'saveLogs',
+						description: 'Save client logs for a session',
+						action: 'Save logs',
+					},
+					{
+						name: 'Start Chat',
+						value: 'startChat',
+						description: 'Start a new chat session',
+						action: 'Start a chat session',
 					},
 					{
 						name: 'Start Preview Chat',
@@ -96,18 +111,6 @@ export class Typebot implements INodeType {
 						value: 'updateTypebotInSession',
 						description: 'Update typebot configuration in an active session',
 						action: 'Update typebot in session',
-					},
-					{
-						name: 'Save Logs',
-						value: 'saveLogs',
-						description: 'Save client logs for a session',
-						action: 'Save logs',
-					},
-					{
-						name: 'Generate Upload URL',
-						value: 'generateUploadUrl',
-						description: 'Generate a presigned URL for file upload',
-						action: 'Generate upload URL',
 					},
 				],
 				default: 'startChat',
@@ -1000,22 +1003,30 @@ export class Typebot implements INodeType {
 							body.textBubbleContentFormat = additionalFields.textBubbleContentFormat;
 						}
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v1/typebots/${publicId}/startChat`,
-							body,
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v1/typebots/${publicId}/startChat`,
+								body,
+								json: true,
+							},
+						);
 					} else if (operation === 'continueChat') {
 						const sessionId = this.getNodeParameter('sessionId', i) as string;
 						const message = this.getNodeParameter('message', i) as string;
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v1/sessions/${sessionId}/continueChat`,
-							body: { message },
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v1/sessions/${sessionId}/continueChat`,
+								body: { message },
+								json: true,
+							},
+						);
 					} else if (operation === 'startPreviewChat') {
 						const typebotId = this.getNodeParameter('typebotId', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -1036,20 +1047,28 @@ export class Typebot implements INodeType {
 							}
 						}
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v1/typebots/${typebotId}/preview/startChat`,
-							body,
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v1/typebots/${typebotId}/preview/startChat`,
+								body,
+								json: true,
+							},
+						);
 					} else if (operation === 'updateTypebotInSession') {
 						const sessionId = this.getNodeParameter('sessionId', i) as string;
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v1/sessions/${sessionId}/updateTypebot`,
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v1/sessions/${sessionId}/updateTypebot`,
+								json: true,
+							},
+						);
 					} else if (operation === 'saveLogs') {
 						const sessionId = this.getNodeParameter('sessionId', i) as string;
 						const clientLogs = this.getNodeParameter('clientLogs', i) as string;
@@ -1061,12 +1080,16 @@ export class Typebot implements INodeType {
 							throw new NodeOperationError(this.getNode(), 'Client Logs must be valid JSON');
 						}
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v2/sessions/${sessionId}/clientLogs`,
-							body: { clientLogs: logs },
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v2/sessions/${sessionId}/clientLogs`,
+								body: { clientLogs: logs },
+								json: true,
+							},
+						);
 					} else if (operation === 'generateUploadUrl') {
 						const sessionId = this.getNodeParameter('sessionId', i) as string;
 						const fileName = this.getNodeParameter('fileName', i) as string;
@@ -1080,13 +1103,17 @@ export class Typebot implements INodeType {
 							body.fileType = fileType;
 						}
 
-						responseData = await this.helpers.httpRequest({
-							method: 'POST',
-							url: `${chatBaseUrl}/v2/generate-upload-url`,
-							qs: { sessionId },
-							body,
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'POST',
+								url: `${chatBaseUrl}/v2/generate-upload-url`,
+								qs: { sessionId },
+								body,
+								json: true,
+							},
+						);
 					}
 				}
 
@@ -1218,11 +1245,15 @@ export class Typebot implements INodeType {
 					} else if (operation === 'getPublished') {
 						const publicId = this.getNodeParameter('publicId', i) as string;
 
-						responseData = await this.helpers.httpRequest({
-							method: 'GET',
-							url: `${chatBaseUrl}/v1/publicTypebots/${publicId}`,
-							json: true,
-						});
+						responseData = await this.helpers.httpRequestWithAuthentication.call(
+							this,
+							'typebotApi',
+							{
+								method: 'GET',
+								url: `${chatBaseUrl}/v1/publicTypebots/${publicId}`,
+								json: true,
+							},
+						);
 					} else if (operation === 'import') {
 						const workspaceId = this.getNodeParameter('workspaceId', i) as string;
 						const typebotData = this.getNodeParameter('typebotData', i) as string;
@@ -1501,7 +1532,7 @@ export class Typebot implements INodeType {
 					returnData.push(...executionData);
 					continue;
 				}
-				throw error;
+				throw new NodeApiError(this.getNode(), error as JsonObject);
 			}
 		}
 
