@@ -20,7 +20,8 @@
   },
   "author": {
     "name": "אחיה אוטומציה",
-    "email": "a.c0504197060@gmail.com"
+    "email": "a.c0504197060@gmail.com",
+    "url": "https://achiya-automation.com"
   },
   "main": "index.js",
   "scripts": {
