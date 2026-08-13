@@ -3,7 +3,6 @@ import {
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
-	ICredentialTestFunctions,
 } from 'n8n-workflow';
 
 export class TypebotApi implements ICredentialType {

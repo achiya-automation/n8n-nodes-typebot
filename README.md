@@ -192,7 +192,7 @@ A typical chat flow in n8n might look like:
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
 - [Typebot documentation](https://docs.typebot.io/)
 - [Typebot API reference](https://docs.typebot.io/api-reference)
-- [GitHub repository](https://github.com/yourusername/n8n-nodes-typebot) (update with your repo URL)
+- [GitHub repository](https://github.com/achiya-automation/n8n-nodes-typebot)
 
 ## License
 
@@ -201,7 +201,7 @@ A typical chat flow in n8n might look like:
 ## Support
 
 For issues or questions:
-- Open an issue on [GitHub](https://github.com/yourusername/n8n-nodes-typebot/issues)
+- Open an issue on [GitHub](https://github.com/achiya-automation/n8n-nodes-typebot/issues)
 - Check the [n8n community forum](https://community.n8n.io/)
 - Refer to [Typebot documentation](https://docs.typebot.io/)
 

@@ -16,8 +16,9 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
+      # npm Trusted Publishing (OIDC) requires a recent npm; no NPM_TOKEN needed.
+      - run: npm install -g npm@latest
       - run: npm ci
       - run: npm run build
+      # Auth comes from npm Trusted Publishing (GitHub Actions OIDC); provenance is required for n8n verification.
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
