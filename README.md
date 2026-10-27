@@ -218,3 +218,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Typebot management (CRUD operations)
 - Results management
 - Workspace and folder management
+
+## Maintainer
+
+Built and maintained by [Achiya Automation](https://achiya-automation.com/en/services/integrations/), which builds custom chatbot and system integrations for businesses in Israel.
